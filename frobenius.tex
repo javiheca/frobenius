@@ -17,6 +17,7 @@
 \newtheorem{example}[definition]{Example}
 \theoremstyle{plain}
 \newtheorem{lemma}[definition]{Lemma}
+\newtheorem{claim}[definition]{Claim}
 \newtheorem{proposition}[definition]{Proposition}
 \newtheorem{corollary}[definition]{Corollary}
 \newtheorem{Conjecture}[definition]{Conjecture}
@@ -266,12 +267,154 @@ This by induction will be $M_{j-2}$. We now notice that under a rearrengment of 
 
 \section{Dyck Paths and (312)-Avoiding Permutations}
 
-Recall that there is a bijection between Dyck paths and $(312)$-avoiding permutations. The map sending Dyck paths to $(312)$-avoiding permutations under this bijection will be denoted by $S$. Moreover, the statistic that assigns to each $(312)$-avoiding permutations the number of double ascents within the permutation will be denoted by $R$. 
+We now introduce the notion of $312$-avoiding permutations and describe the bijection between $312$-avoiding permutations and Dyck paths, which will be used to count the number of simple non-projective reflexive modules in a Nakayama algebra.
+\begin{definition}
+    A permutation $\sigma$ is $321$-avoiding if there are no indices $i < j < k$ such that $\sigma(k) < \sigma(i) < \sigma(j)$.
+    Denote the set of all $312$-avoiding permutations in $S_n$ by $S_n(312)$.
+\end{definition}
+\begin{example}
+    Permutation $\sigma = (1, 3, 2, 4, 5)$ is $312$-avoiding, while $\tau = (1, 5, 2, 3, 4)$ is not.
+\end{example}
 
+%Recall that there is a bijection between Dyck paths and $(312)$-avoiding permutations. The map sending Dyck paths to $(312)$-avoiding permutations under this bijection will be denoted by $S$. Moreover, the statistic that assigns to each $(312)$-avoiding permutations the number of double ascents within the permutation will be denoted by $R$. 
+\subsection{Bijection between Dyck Paths and $(312)$-avoiding permutations}
+Let $s_i$ denote transposition $(i, i+1)$.
+In order to construct a bijection between Dyck paths and $(312)$-avoiding permutations, we first describe how to decompose a permutation $\sigma \in S_n(312)$ in a unique way as a product $\sigma = \sigma_n\sigma_{n-1}\dots\sigma_1$, where each $\sigma_k$ is a product of adjacent transpositions whose indices are strictly increasing and for all $k$, $\sigma_k^{-1}\sigma_{k+1}^{-1}\dots\sigma_n^{-1}\sigma$ fixes all the elements from $k$ to $n$.
+
+Taking $\sigma \in S_n(312)$, suppose $n$ is at position $i_n$ in $\sigma$. Then precomposing $\sigma$ with $s_{n-1}s_{n-2}\dots s_{i_n+1}s_{i_n}$ moves $n$ from position $i_n$ to position $n$.
+We define $\sigma_n := s_{i_n}s_{i_n+1}\dots s_{n-1}$. Note that $\sigma_n^{-1}\sigma$ now fixes $n$ and leaves the relative order of other elements the same.
+Now suppose $n-1$ is at position $i_{n-1}$ in $\sigma_n^{-1}\sigma$. Then precomposing with $s_{n-2}s_{n-3}\dots s_{i_{n-1}+1}s_{i_{n-1}}$ we move $n-1$ from position $i_{n-1}$ to position $n-1$. We define $\sigma_{n-1} := s_{i_{n-1}}s_{i_{n-1}+1}\dots s_{n-2}$, so that $\sigma_{n-1}^{-1}\sigma_n^{-1}\sigma$ fixes $n$ and $n-1$.
+
+We repeat this for all the elements from $n$ down to $1$. For each $k$, we define $\sigma_k$ to be $s_{i_k}s_{i_k+1}\dots s_{k-1}$ where $i_k$ is the position of $k$ in $\sigma_{k+1}^{-1}\dots \sigma_n^{-1}\sigma$.
+
+Observe that $\sigma_1^{-1}\dots\sigma_n^{-1}\sigma = \text{id}$ since it fixes all the elements. Thus $\sigma = \sigma_n\dots\sigma_1$. The other two properties also hold by construction. Moreover, the decomposition is uniquely defined by these properties.
+
+Note that in $\sigma_{k+1}^{-1}\dots \sigma_n^{-1}\sigma$ the element $k$ can already be at position $k$, in which case we take $\sigma_{k}$ to be the identity, but keep it explicit for the ease of constructing the bijection. In fact, $\sigma_1$ is always the identity.
+
+Now above decomposition, we can define a map $S: S_n(312) \to D_n$, where $D_n$ is the set of Dyck paths of length $2n$.
+Let $l(\sigma)$ be the length of $\sigma$, meaning the number of simple transpositions $s_i$ in description of $\sigma$ as a product of simple transpositions.
+For $\sigma = \sigma_n \dots \sigma_1 \in S_n(312)$, where $\sigma_k$ is as above, we define $S(\sigma)$ to be the Dyck path with Kupisch series $[c_0, c_1, \dots , c_n]$, where $c_i := l(\sigma_{n-i}) + 2$ for $i = 0, \dots, n - 1$ and $c_n := 1$.
+
+This can be visualized in a $n \times n$ grid where row $i$ corresponds to $\sigma_{i}$ and column $j$ corresponds to $s_j$ and the square in row $i$ and column $j$ is coloured if and only if $s_j$ appears in $\sigma_i$. Note that all the coloured squares are above the diagonal and in row $k$ there are $l(\sigma_k)$ consecutive coloured squares from column $k - 1$ to the left. Outlining the coloured area above the diagonal gives a visual representation of the Dyck path corresponding to $\sigma$. The fact that we indeed obtain a valid Dyck path follows from $\sigma$ being $312$-avoiding, the proof of which can be found in (TODO: cite).
+
+The inverse map $S^{-1}: D_n \to S_n(312)$ of $S$ is defined by taking a Dyck path with Kupisch series $[c_0, c_1, \dots , c_n]$ to the permutation $\sigma = \sigma_n \dots \sigma_1$ where $\sigma_k$ is the product of $c_{n-k} - 2$ adjacent transpositions whose indices are strictly increasing and ending at $k-1$.
+Again the map can be visualized in the $n \times n$ grid, where we write $s_j$ in each square in row $i$ and column $j$ that is under the path and above the diagonal. Then $\sigma_i$ is the product of all $s_j$'s in row $i$. If no squares in row $i+1$ are coloured, $\sigma_i$ is identity.
+For the proof that permutation obtained in this way is really $(312)$-avoiding, see (TODO: cite).
+It is easy to check that the maps are inverse to each other.
+
+\subsection{Simple non-projective reflexive modules via $(312)$-avoiding permutations}
+
+Taking Nakayama algebra $A$, we want to count simple non-projective reflexive modules.
+We consider a Dyck path $D_A$, uniquely defined by the Auslander-Reiten quiver of $A$.
+Further let $R$ be the statistic on $S_n(312)$, assigning to each $312$-avoiding permutation $\sigma$ the number of double ascents in $\sigma$,
+where double ascent of $\sigma$ is an index $i \in \{2, \dots , n-1\}$ such that $\sigma(i-1) < \sigma(i) < \sigma(i+1)$.
+We get the following theorem:
 \begin{theorem}
-	Let $A$ be a Nakayama algebra with Kupisch series $c_i = \dim{(e_i A)}$ and $D$ the corresponding Dyck path. Then the number of non-projective simple reflexive modules correspond precisely with $R(S(D))$.  
+	Let $A$ be a Nakayama algebra with Kupisch series $c_i = \dim{(e_i A)}$ and $D_A$ the corresponding Dyck path. Then the number of simple non-projective reflexive modules corresponds to $R(S^{-1}(D_A))$.  
 \end{theorem}
+\begin{proof}
+	Denote $\sigma := S^{-1}(D_A)$ the $(312)$-avoiding permutation, obtained from the Dyck path $D_A$ and let $m_j$ be the number of occurances of $s_j$ in the decomposition of $\sigma$, as described in the bijection above. Further let $[d_0, \dots, d_n]$ be the (co)Kupisch series of $D_A$.
+	Using the visual presentation of the map $S$, it is immediate to check that for all $2 \leq k \leq n$,
+	\begin{equation}
+		\label{eq:d_k}
+		d_k = m_{n-k+1} + 2.
+	\end{equation}
+	Furthermore since $d_0 = 1$ and $d_1 = 2$, we can extend this to $d_k = m_{n-k+1} + 2$ for all $1 \leq k \leq n$, by taking $m_n = 0$.
+	By Theorem \ref{simple_reflexive_iff_inequality}, simple non-projective module $s_k$ is reflexive if and only if $d_{k+1} \leq d_k \leq d_{k-1}$, which is equivalent to $m_{n-k} \leq m_{n-k+1} \leq m_{n-k+2}$ by \ref{eq:d_k}.
+	Thus it is enough to show that $m_{k-1} \leq m_{k} \leq m_{k+1}$ if and only if $\sigma(k-1) < \sigma(k) < \sigma(k+1)$.
 
+	%RIGHT TO LEFT
+	Suppose first that $\sigma(k-1) < \sigma(k) < \sigma(k+1)$ for some $2 \leq k \leq n-1$.
+	\begin{claim}
+		\label{claim1}
+		Suppose for some $2 \leq i \leq n$, $\sigma(i-1) < \sigma(i)$. Then for all $j = 1,\dots, n$, if $\sigma(j) > \sigma(i)$ then $j >i$.
+	\end{claim}
+	\begin{proof}
+		Suppose there is some $j < i$ such that $\sigma(j) > \sigma(i)$. Then we have $\sigma(i-1) < \sigma(i) < \sigma(j)$, which means that $j \neq i-1$ and $\sigma(j)\sigma(i-1)\sigma(i)$ gives a $(312)$-pattern, contradicting the fact that $\sigma$ is $312$-avoiding.
+	\end{proof}
+	It follows immediately that $k \leq \sigma(k)$ and $k+1 \leq \sigma(k+1)$, by counting the number of elements that can be on the right of $\sigma(k)$ or $\sigma(k+1)$ respectively.
+	This means that ordering elements grater than $\sigma(k+1)$ does not affect $m_{k-1}, m_k$ and $m_{k+1}$, thus we can without loss of generality assume that $\sigma(j) = j$ for all $j > \sigma(k+1)$, i.e. all the elements greater than $\sigma(k+1)$ are already ordered.
+
+	The inequality $m_{k-1} \leq m_k \leq m_{k+1}$ will now follow directly from the claim bellow.
+    \begin{claim}
+        Let $\sigma$ be a $(312)$-avoiding permutation and $2 \leq k \leq n-1$ such that $\sigma(k-1) < \sigma(k) < \sigma(k+1)$. Then
+        \begin{enumerate}
+            \item $m_{k+1} = \sigma(k+1) - (k+1)$,
+            \item $m_k = \sigma(k) - k$.
+            \item $m_{k-1} \leq \sigma(k) - k$.
+        \end{enumerate}    
+    \end{claim}
+	\begin{proof}
+		To prove the claim, we are going to count the number of corresponding transpositions appearing when decomposing $\sigma$ via the explicit algorithm.
+
+		\begin{enumerate}
+            \item We will prove that $m_{k+1} = |\{j : k + 1 < j \leq \sigma(k+1)\}|$, which clearly has cardinality $\sigma(k+1) - (k+1)$.
+            Since elements grater than $\sigma(k+1)$ are already at the corresponding position by \ref{claim1}, we do not need $s_{k+1}$ to order them.
+            For elements $j\leq k+1$ we obviously do not need $s_{k+1}$ either, since we do not want to move them higher from position $k+1$.
+            Therefore we just need to prove that for ordering each $k + 1 < j \leq \sigma(k+1)$ we need to apply $s_{k+1}$.
+            For this let $i$ be such that $k+1 < \sigma(i) < \sigma(k+1)$ and $j = \sigma(i)$.
+            We consider two cases:
+            \begin{itemize}
+                \item If $i \leq k+1$, by ordering grater elements $j$ can only move further to the left. Thus when ordering $j$ we need to get it from position $i' \leq i \leq k+1$ to position $j > k+1$, meaning we need to apply $s_{k+1}$.
+                \item Considering now all the elements $k + 1 < \sigma(i) \leq \sigma(k+1)$, such that $i > k+1$ (i.e. on the right of $\sigma(k+1)$), we note that they have to be placed in decreasing order starting at position $k+2$. Indeed if we had $k+1 < j = \sigma(i) < j' = \sigma(i') \leq \sigma(k+1)$ with $i < i'$, then $\sigma(k+1)\sigma(i)\sigma(i')$ would be a $(312)$-pattern, a contradiction.
+                We thus have a sequence $\sigma(k-1)\sigma(k)\sigma(k+1)j_1j_2 \dots j_l$, with $j_i > j_{i+1}$. Then each of $j_i$ gets to position $\leq k+1$ when ordering the previous one and while ordering it has to be moved to the right using $s_{k+1}$.
+            \end{itemize}
+
+            \item Note that replacing $k+1$ for $k$ in the above argument does not change the reasoning, thus we conclude that $m_k = |\{j : k < j \leq \sigma(k)\}| = \sigma(k) - k$.
+            \item For the last claim, it is enough to see that $m_{k-1} \leq |\{j : k - 1 < j < \sigma(k)\}|$. This is immediate consequence of the observation above that from $j = \sigma(i) > \sigma(k)$ it follows that $i > k$ and thus all elements grater or equal to $\sigma(k)$ are on the right of $k-1$, meaning we do not need to apply $s_{k-1}$ to order them. By the same argument as in the first case we do not need to apply $s_{k-1}$ to order elements $j \leq k-1$ either.
+        \end{enumerate}
+	\end{proof}
+
+	%LEFT TO RIGHT
+	Conversely, assume that $m_{k-1} \leq m_k \leq m_{k+1}$ for some $2 \leq k \leq n-1$. To prove that $\sigma(k-1) < \sigma(k)< \sigma(k+1)$, we argue by induction on the length $n$ of the permutation.
+
+	For $n = 3$, the only possibility is $m_1 \leq m_2 \leq m_3$. But since $m_3 = 0$ then $m_1 = m_2 = 0$ and $\sigma$ is the identity, satisfying $\sigma(1) < \sigma(2) < \sigma(3)$.
+
+	Take now $\sigma \in S_n(312)$ for $n > 3$ such that $m_{k-1} \leq m_k \leq m_{k+1}$ for some $2 \leq k \leq n-1$ and suppose that the claim holds for all permutations in $S_{n-1}(312)$.
+
+	If $k = n-1$, then from $m_n = 0$ it follows that $m_{n-2} = m_{n-1} = 0$ and thus $\sigma(n-1) = n-1$ and $\sigma(n) = n$. Then trivially $\sigma(n-2) < \sigma(n-1) < \sigma(n)$ and we are done.
+    Therefore we only need to consider the case where $k < n-1$.
+
+	Now let $\sigma_n$ be the permutation obtained in the decomposition of $\sigma$ as in construction of the bijection. Then $\sigma_n^{-1} \sigma$ fixes $n$ and we can restrict it to $\sigma' \in S_{n-1}(312)$ by just considering the elements from $1$ to $n-1$.
+	Denoting $m_j'$ the numbers of corresponding simple transpositions needed to order $\sigma'$, the condition $k<n-1$ allows us to consider $m_{k-1}', m_k'$ and $m_{k+1}'$.
+	Furthermore,
+	\begin{equation*}
+		m_j' = \begin{cases}
+		m_j & j < i_n \\
+		m_j - 1 & j \geq i_n
+		\end{cases}
+	\end{equation*}
+	where $i_n$ is the position of $n$ in $\sigma$. 
+
+	We consider three cases:
+    \begin{itemize}
+        \item If $i_n > k+1$, then ordering $n$ does not affect any of $m_{k-1}$, $m_k$ and $m_{k+1}$.
+        It follows that $m_{k-1}' \leq m_k' \leq m_{k+1}'$ and by induction hypothesis $\sigma'(k-1) < \sigma'(k) < \sigma'(k+1)$.
+        Again using $i_n \geq k+1$ we see that $\sigma(k-1) = \sigma'(k-1)$, $\sigma(k) = \sigma'(k)$, $\sigma'(k+1) = \sigma(k+1)$ and the desired inequality follows.% (putting $n$ to position $i \geq k+1$ can only increase $\sigma'(k+1)$ to $n$).
+        
+		\item If $i_n = k+1$, the inequality $\sigma(k) < \sigma(k+1) = n$ follows trivially. Thus we just need to show that $\sigma(k-1) < \sigma(k)$.
+		First observe that if $m_k < m_{k+1}$ we still get $m_{k-1}' = m_{k-1} \leq m_k' = m_k \leq m_{k+1}' = m_{k+1} - 1$ and can apply induction. Thus we may assume $m_k = m_{k+1}$.
+
+        For the sake of contradiction, assume that $\sigma(k-1) > \sigma(k)$. We will show that this implies $m_{k-1} > m_k$.
+		\begin{claim}
+			In the given setting, it holds that $\sigma(k) > \sigma(k+2) > \dots > \sigma(n)$.
+		\end{claim}
+		\begin{proof}
+			The fact that $\sigma(k+2) > \dots > \sigma(n)$ follows from the fact that $\sigma(k+1) = n$ and that $\sigma$ is $(312)$-avoiding.
+			For the sake of contradiction assume that $\sigma(k) < \sigma(k+2)$. 
+			Since we used one $s_{k+1}$ to order $n$, and the only element that can use $s_k$ without using $s_{k+1}$ is $k+1$, we see that $k+1$ has to use $s_k$ and each element $j \neq k+1,n$ has to use both or neither in order to assure $m_k = m_{k+1}$.
+			Now if $\sigma(k+2) < n-1$, then $n-1$ is on the left of $\sigma(k)$ by above and $(n-1)\sigma(k)\sigma(k+2)$ is a $(312)$-pattern, a contradiction.
+			If $\sigma(k+2) = n-1$ and $k+1 \neq n-1$, then we use $s_{k+1}$ to order it without using $s_k$, again a contradiction.
+			Finally if $\sigma(k+2) = n-1$ and $k+1 = n-1$, then $\sigma(k+2)$ is already ordered and will not use $s_k$, a contradiction.
+		\end{proof}
+		From the claim and assumptions we get that $\sigma(k-1) > \sigma(k) > \sigma(k+2) > \dots > \sigma(n)$, meaning each element will be at position $\leq k-1$ when we start ordering them. It follows that for all $j \neq k$ we will either use both $s_{k-1}$ and $s_k$ or neither of them, while for $k$ we will use $s_k$ without using $s_{k-1}$, thus $m_{k-1} > m_k$, a contradiction.
+
+		\item It remains to show that case $i_n \leq k$ is not possible.
+		This follows by similar reasoning as in the previous case, as if $i_n \leq k-1$, then $\sigma(k) > \sigma(k+1) > \dots > \sigma(n)$ in order to avoid $(312)$-pattern. This means that all elements get to the position at most $k$ before we start ordering them. This means that we will use $s_k$ without using $s_{k+1}$ to order $k+1$ and will use either both or neither for ordering all other elements. We conclude that $m_k > m_{k+1}$, a contradiction.
+    \end{itemize}
+\end{proof}
+\begin{comment}
+	We can now conclude the proof of the main theorem by showing that the conditions of the theorem are satisfied for the coKüplić series $d$.
 \begin{proof}
 	Consider $D$ the Dyck path and $\sigma := S(D)$ its corresponding $(312)$-avoiding permutation. Then we will denote by $m_i$ the non-negative integer given by the amount of transpositions of the form $s_i$ that appear when decomposing $\sigma$ as transpositions as given by the bijection described above. Then one can consider the coKupisch series $d = \left ( d_i \right )_{i=0}^n$ corresponding to $D$. It is immediate to check the following equality: 
 	\begin{equation*}
@@ -335,6 +478,7 @@ Recall that there is a bijection between Dyck paths and $(312)$-avoiding permuta
 	\end{enumerate}
 	Having seen this, one concludes that $S_{n-k+1}$ is a simple reflexive module if and only if $\sigma(k-1) < \sigma(k) < \sigma(k+1)$, concluding with the desired bijection. 
 \end{proof}
+\end{comment}
 
 \bibliographystyle{plain} 
 \bibliography{refs}
